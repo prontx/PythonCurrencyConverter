@@ -8,6 +8,8 @@ import os
 from dotenv import load_dotenv
 import tkinter as tk
 
+# Global variables
+
 frame_amount         = None
 label_amount         = None
 frame_from           = None 
@@ -30,8 +32,10 @@ convert_button       = None
 cur_from             = None
 amount_from          = None
 cur_to               = None
+window               = None
 
 def convert(cur_from, amount_from, cur_to):
+    #global window
     url = "https://currency-conversion-and-exchange-rates.p.rapidapi.com/convert"
     querystring = {"from":f"{cur_from}","to":f"{cur_to}","amount":f"{amount_from}"}
     load_dotenv()
@@ -46,6 +50,7 @@ def convert(cur_from, amount_from, cur_to):
     print(result["result"])
 
 def graphics():
+    global window
     window = tk.Tk()
 
     window.title('Currency Converter App')
@@ -139,8 +144,7 @@ def graphics():
     convert_button.pack(padx=5, pady=5)
 
     # End of row 3
-
-    window.mainloop()
+    #window.mainloop()
 
 def handle_inputs():
     global cur_from
@@ -154,4 +158,4 @@ def handle_inputs():
 
 if __name__ == "__main__":
     graphics()
-    handle_inputs()
+    window.mainloop()
