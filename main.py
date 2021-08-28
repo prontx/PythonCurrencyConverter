@@ -32,8 +32,12 @@ def convert():
 def graphics():
     window = tk.Tk()
 
-    window.rowconfigure(0, minsize=50, weight=1)
+    window.title('Currency Converter App')
+
+    window.rowconfigure([0, 1], minsize=50, weight=1)
     window.columnconfigure([0, 1, 2, 3], minsize=50, weight=1)
+
+    # Beginning of row 1
 
     frame_amount = tk.Frame(master=window, relief=tk.GROOVE, borderwidth=1)
     frame_amount.grid(row=0, column=0, padx=10, pady=10)
@@ -54,6 +58,40 @@ def graphics():
     frame_to.grid(row=0, column=3, padx=10, pady=10)
     label_to = tk.Label(master=frame_to,text='To')
     label_to.pack(padx=10, pady=10)
+
+    # End of row 1
+    # Beginning of row 2
+
+    frame_amount_entry = tk.Frame(master=window, relief=tk.GROOVE, borderwidth=1)
+    frame_amount_entry.grid(row=1, column=0, padx=10, pady=10)
+    label_amount_entry = tk.Entry(master=frame_amount_entry)
+    label_amount_entry.pack(padx=10, pady=10)
+
+    OPTIONS = [
+        "USD",
+        "EUR",
+        "CZK"
+    ]
+
+    frame_from_choose = tk.Frame(master=window, relief=tk.GROOVE, borderwidth=1)
+    frame_from_choose.grid(row=1, column=1, padx=10, pady=10)
+    from_entry_variable = tk.StringVar(window)
+    from_entry_variable.set(OPTIONS[0])
+    w = tk.OptionMenu(frame_from_choose, from_entry_variable, *OPTIONS)
+    w.pack()
+
+    frame_swap_button = tk.Frame(master=window, relief=tk.GROOVE, borderwidth=1)
+    frame_swap_button.grid(row=1, column=2, padx=10, pady=10)
+    swap_button = tk.Button(master=frame_swap_button, text="-->\n<--")
+    swap_button.pack(padx=10, pady=10)
+
+    frame_convert_button = tk.Frame(master=window, relief=tk.GROOVE, borderwidth=1)
+    frame_convert_button.grid(row=1, column=3, padx=10, pady=10)
+    convert_button = tk.Button(master=frame_convert_button, text="Convert")
+    convert_button.pack(padx=5, pady=5)
+
+    # End of row 2
+
 
     window.mainloop()
 
