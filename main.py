@@ -2,11 +2,13 @@
 # Author: Matsvei Hauryliuk, FIT VUT Student
 # Github: @prontx
 
+from tkinter.constants import END
 import requests
 import json
 import os
 from dotenv import load_dotenv
 import tkinter as tk
+import re
 
 # Global variables
 
@@ -19,6 +21,7 @@ amount_from = cur_to = window = None
 
 def convert(cur_from, amount_from, cur_to):
     global window
+    global label_amount_entry
     url = "https://currency-conversion-and-exchange-rates.p.rapidapi.com/convert"
     querystring = {"from":f"{cur_from}","to":f"{cur_to}","amount":f"{amount_from}"}
     load_dotenv()
@@ -34,10 +37,16 @@ def convert(cur_from, amount_from, cur_to):
     
     frame_result = tk.Frame(master=window, relief=tk.FLAT, borderwidth=1, background='#ec6627')
     frame_result.grid(row=2, column=0, columnspan=2, padx=5, pady=5, sticky='nsew')
+    label_amount_entry.delete(0, END)
     label_result = tk.Label(master=frame_result, text=f'''The result of conversion of 
         {amount_from} {cur_from} to {cur_to} is: \n{result} {cur_to}''', 
         font='Helvetica 14 bold', background='#ec6627')
     label_result.pack(padx=5, pady=5)
+
+def only_numeric_input(P):
+    if P.isdigit() or P == "":
+        return True
+    return False
 
 def graphics():
     global window
@@ -83,8 +92,12 @@ def graphics():
 
     frame_amount_entry = tk.Frame(master=window, relief=tk.FLAT, borderwidth=1, background='#ec6627')
     frame_amount_entry.grid(row=1, column=0, padx=5, pady=5)
+
     label_amount_entry = tk.Entry(master=frame_amount_entry)
     label_amount_entry.pack(padx=5, pady=5)
+    callback = window.register(only_numeric_input)
+    label_amount_entry.configure(validate='key', validatecommand=(callback, "%P"))
+
 
     OPTIONS = [
         "USD",
@@ -132,7 +145,7 @@ def handle_inputs():
     cur_to = to_entry_variable.get() 
     convert(cur_from, amount_from, cur_to)
 
-def handle_inputs(event):
+def handle_inputs_(event):
     global cur_from
     global cur_to
     global amount_from
@@ -153,18 +166,20 @@ def swap_currencies():
     to_entry_variable.set(auxiliary_var1)
 
 # Handles S key pressed
-def swap_currencies(event):
+def swap_currencies_(event):
     global from_entry_variable
     global to_entry_variable
+    global label_amount_entry
+
     auxiliary_var1 = from_entry_variable.get()
     auxiliary_var2 = to_entry_variable.get()
     from_entry_variable.set(auxiliary_var2)
     to_entry_variable.set(auxiliary_var1)
-    print(event.char)
+    print(event.char)    
 
 if __name__ == "__main__":
     graphics()
     # Binding the Enter key to show output
-    window.bind('<Return>', handle_inputs)
-    window.bind('S', lambda event: swap_currencies(event))
+    window.bind('<Return>', handle_inputs_)
+    window.bind('S', lambda event: swap_currencies_(event))
     window.mainloop()
